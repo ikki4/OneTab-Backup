@@ -2,7 +2,6 @@
 # coding: utf-8
 
 import os
-import glob
 from pathlib import Path
 from datetime import datetime
 
