@@ -36,3 +36,9 @@ It does NOT save your tabs groups' name and status (starred, locked, etc). It sa
    - Under Settings, select `Specific user` make sure that is your username.
    - Hit `OK` twice, and it should work.
 5. It's also possible to use `pyinstaller` to make an executable of the script to make it easier to run. Follow this [tutorial](https://datatofish.com/executable-pyinstaller/) to do that.
+
+## How it works 
+
+After trying out [other solutions](https://github.com/itsjoshthedeveloper/backupOneTab/issues/1), I found out that this folder: `C:\Users\<Username>\AppData\Local\Google\Chrome\User Data\Default\Local Extension Settings\chphlpgkkbolifaimnlloiipkdnihall` contains a .log file that has multiple lines, each containing many Onetab backups. I noticed that the string with the latest backup is usually in the end of the .log file, and I also noticed that copying all the files in that folder and later restoring them was not enough for Onetab to restore the saved tabs.
+
+So far, Onetab has not released an official way to parse through that file or to automatically backup the saved tabs, so I wrote my own. It's not perfect, since it does not store information like tab groups' names and their status (stared, locked, etc), but it mimics pretty well Onetab's manual Export feature.
