@@ -1,0 +1,6 @@
+https://github.com/itsjoshthedeveloper/backupOneTab#how-to-use | itsjoshthedeveloper/backupOneTab: Back up and restore your OneTab Chrome extension data
+https://github.com/itsjoshthedeveloper/backupOneTab/issues/1 | Does it really work, though? · Issue #1 · itsjoshthedeveloper/backupOneTab
+https://docs.python.org/3/library/pathlib.html#module-pathlib | pathlib — Object-oriented filesystem paths — Python 3.9.7 documentation
+
+https://choosealicense.com/licenses/mit/ | MIT License | Choose a License
+https://github.com/ | GitHub
