@@ -48,7 +48,7 @@ def main():
     #Now the goal is just get all saved tabs (url and titles)
     #x and y are placeholders used on the data cleaning
 
-    x=x[x.find('"')+1:x.find('ا')].replace('\\','')
+    x=x[x.find('"')+1:x.find('ุง')].replace('\\','')
     y=x.split('"tabsMeta":')
     for i in range(len(y)):
         y[i]=y[i][1:y[i].find(']')]
@@ -65,8 +65,8 @@ def main():
     #5. Creating a txt file (containing the tabs) that can be imported to Onetab
 
     s=''
-    for i in y:
-        s+='\n'.join([str(j) for j in i])
+    for group in groups:
+        s+='\n'.join([str(tab_obj) for tab_obj in group])
         s+='\n\n'
 
     filename='Onetab_backup_'+str(datetime.now().strftime('%Y-%m-%d_%Hh%Mm%Ss'))+'.txt'
