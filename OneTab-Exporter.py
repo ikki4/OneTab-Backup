@@ -34,10 +34,17 @@ def main():
     with open(file, encoding='utf8', errors="ignore") as f:
         x=f.readlines()
 
+    #checking if x has a list of backups or a string with multiple backups
+    #in case it's a string, it must be converted to a list of backups
+    if len(x)==1:
+        x=x[0].replace('\\','').split('\x00')
+        x=[i for i in x if 'tabsMeta' in i]
+
     #finding most recent tabs backup, it's usually in the end of the list
-    for i in range(-1,-len(x),-1):
-        if 'tabsMeta' in x[i]:
-            x=x[i]
+    x.reverse()
+    for backup in x:
+        if 'tabsMeta' in backup:
+            x=backup
             break
 
     #3. Data cleaning
