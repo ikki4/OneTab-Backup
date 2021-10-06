@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 from datetime import datetime
 
+
 #path to the Chrome data
 CHROME_PATH = r'C:\Users\<Username>\AppData\Local\Google\Chrome\User Data\Default\Local Extension Settings\chphlpgkkbolifaimnlloiipkdnihall'
 #path to the desired backup/export folder
