@@ -6,6 +6,8 @@ This is a Python script that will allow you to automatically* back up and manual
 
 **Requires Python 3.4+ (I've only tested it on Python 3.8.11)**
 
+**Note:** I'm a novice programmer and this script is in it's early stages of development, so expect some bugs/crashes. I'll do my best to fix every error I find, so keep checking this page to make sure you have the latest version. If you would like to fork my project and develop it even further, feel free to do so.
+
 ## What it does
 
 It creates a text file containing your saved tabs' information (url and title), exactly as if you selected "Export/Import URLs" in Onetab and copied the "Export" section contents to a text file.
