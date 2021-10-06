@@ -82,7 +82,7 @@ def main():
         Path(EXPORT_PATH).mkdir()
 
     #saving export file
-    with open(Path(EXPORT_PATH,filename),mode='w') as f:
+    with open(Path(EXPORT_PATH,filename), mode='w', errors="ignore") as f:
         f.write(s)
         
 if __name__ == '__main__':
