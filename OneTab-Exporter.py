@@ -7,7 +7,6 @@
 #0. Imports, global variables and custom Class
 
 import os
-import re
 from pathlib import Path
 from datetime import datetime
 
@@ -22,7 +21,8 @@ CHROME_PATH = r'C:\Users\<Username>\AppData\Local\Google\Chrome\User Data\Defaul
 EXPORT_PATH = r'.\Backups'
 
 #name of the text file to be saved
-FILENAME = 'Onetab_backup_'+ str(datetime.now().strftime('%Y-%m-%d_%Hh%Mm%Ss')) +'.txt'
+FILENAME = f"Onetab Backup {datetime.now().strftime('%Y-%m-%d %Hh%Mm%Ss')}" 
+#old: 'Onetab_backup_'+ str(datetime.now().strftime('%Y-%m-%d_%Hh%Mm%Ss'))
 
 
 # In[3]:
@@ -48,22 +48,16 @@ class OneTabEntry:
 
 def read_backup():
     '''Reads the .log file in the Onetab/Chrome data folder, and
-    returns a list of strings, a list of backups and the most recent backup.
-    strings,backups,chosen_backup = read_backup()
+    returns the list of strings and the list of backups.
+    
+    strings,backups = read_backup()
         
     First we read the .log file and save its contents in the strings variable.
     strings is a list of strings. Each string can have one or multiple Onetab backups. 
     For example:
       strings=["backup_A", "'backup_b1''backup_b2''backup_b3'", "'backup_c1''backup_c2'"]
     In this case, there are 3 strings: the first has one backup, the second has three and the third has two.
-    We want to find the most up-to-date backup.
-    We find the most up-to-date string by finding the string who has the highest "updateDate" timestamp value.
-      * It usually ends up being the last string in strings
-    There's no way to find the most up-to-date backup inside a string, though.
-    But as of my testings, the most up-to-date backup usually is *THE LAST BACKUP INSIDE THE MOST UP-TO-DATE STRING*.
     
-    This function explains a lot and returns a lot of stuff for testing purposes. 
-    Help us figure out more about this obscure OneTab backup feature!
     '''
     
     #selecting the most recent .log file in the onetab/chrome path
@@ -74,30 +68,10 @@ def read_backup():
     with open(file, encoding='utf8', errors="ignore") as f:
         strings=f.readlines()
 
-    #finding out the most up-to-date string (it's usually the last one)
     strings=[i.replace('\\','') for i in strings] #removing the annoying \\ chars inside x
-    pattern=re.compile(r'"updateDate":(\d+)')
-    try:
-        timestamps = [max([int(i) for i in pattern.findall(j)]) for j in strings] #list of the highest timestamp value in each string
-        index=timestamps.index(max(timestamps)) #index of the most up-to-date string, if regex fails use index=-1
-    except Exception:
-        index=-1
-    #getting a list of backups
     backups=[[i for i in j.split('\x00') if 'tabsMeta' in i] for j in [k for k in strings]]
-
-    #most up-to-date backup is the last backup inside the most up-to-date string, so it´s in backups[index][-1]
-
-    #prints
-    print(f'{len(backups)} Strings found:')
-    for i in range(len(backups)):
-        print(f'  String #{i} has {len(backups[i])} backups. Their tab count are: {[clean_data(z,False)[-1] for z in backups[i]]}')
-    print(f'\nThe most up-to-date backup seems to be the last backup in String #{index}.')
     
-    #returning the list of strings, the lists of backups and the most up-to-date backup
-    return [strings,backups,backups[index][-1]]
-
-
-# In[5]:
+    return [strings,backups]
 
 
 #2. Data cleaning
@@ -106,8 +80,7 @@ def clean_data(x, _print=True):
     '''Gets a string containing a Onetab backup, cleans it 
     and returns a list of OneTabEntry objects and the ammount of objects.
     
-    clean_backup,tab_count = clean_data(chosen_backup)
-    
+    cleaned_backup,tab_count = clean_data(backup)
     
     My initial plan was to json.loads the log content so I could keep other information about the tabs,
      but I ended up having some issues with tabs that had ':' and '"' in its title, so I've scraped these plans
@@ -132,19 +105,57 @@ def clean_data(x, _print=True):
     return y,count
 
 
-# In[6]:
+#3. Choosing the most up-to-date backup
+
+def choosing_backup(backups):
+    '''Gets the list of backups, chooses one backup to be considered the most up-to-date,
+    cleans it and return the cleaned backup and the tab count.
+    
+    cleaned_backup_chosen,tab_count = choosing_backup(backups)
+    
+    We want to find the most up-to-date backup.
+    Every new string is more up-to-date than the previous string.
+    Every new backup inside a string is more up-to-date than the previous backup inside the same string.
+    Sometimes a string might have 0 backups, and sometimes a backup might have 0 tabs.
+    CONCLUSION: *The most up-to-date backup is the last not-null backup inside the last string that contains backups.*
+    
+    '''
+
+    cleaned_data=[[clean_data(z,False) for z in j] for j in backups]
+
+    #prints
+    print(f'{len(backups)} Strings found:')
+    for i in range(len(backups)):
+        print(f'  String #{i} has {len(backups[i])} backups. Their tab count are: {[j[-1] for j in cleaned_data[i]]}')
+
+    #finding the last not-null backup
+    chosen=[]
+    for data in cleaned_data[::-1]:
+        for backup,count in data[::-1]:
+            #print(count)
+            if count>0:
+                chosen=[backup,count]
+                break
+        if chosen:
+            break
+    print(f'\nThe backup chosen is the last not-null backup in the list. It has {chosen[-1]} tabs.')            
+    
+    return chosen
+
+
+# In[7]:
 
 
 #3. Creating a text file (containing the tabs) that can be imported to Onetab
 
-def generate_string(clean_backup):
+def generate_string(cleaned_backup):
     '''Gets a clean backup and returns a Onetab-compatible string. 
     
-    s = generate_string(clean_backup)
+    s = generate_string(cleaned_backup)
     '''
     
     s=''
-    for i in clean_backup:
+    for i in cleaned_backup:
         s+='\n'.join([str(j) for j in i])
         s+='\n\n'
     print('Onetab-compatible string generated successfully.')
@@ -166,19 +177,22 @@ def save_txt(s):
     print(f'File "{FILENAME}" saved succesfully in the directory "{str(Path(EXPORT_PATH).resolve())}".')
 
 
-# In[7]:
+# In[10]:
 
 
 def main():
-    strings,backups,chosen_backup = read_backup()
-    clean_backup,tab_count = clean_data(chosen_backup)
-    s = generate_string(clean_backup)
+    strings,backups = read_backup()
+    cleaned_backup_chosen,tab_count = choosing_backup(backups)
+    s = generate_string(cleaned_backup_chosen)
+    global FILENAME
+    FILENAME += f' Tabs_{tab_count}.txt'
     save_txt(s)
 
 
-# In[8]:
+# In[11]:
 
 
 if __name__ == '__main__':
     main()
+
 
