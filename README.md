@@ -22,8 +22,8 @@ It does NOT save your tabs groups' name and status (starred, locked, etc). It sa
 
 1. Clone this repository (or download the .py file).
 2. Open `OneTab-Exporter.py` using a text editor or IDE.
-   - In line 19 (variable CHROME_PATH), replace `<Username>` with your system user's username. For example, my path is `CHROME_PATH = r'C:\Users\ikki\AppData\Local\Google\Chrome\User Data\Default\Local Extension Settings\chphlpgkkbolifaimnlloiipkdnihall'`.
-   - If you wish to change the backups folder: In line 22 (variable EXPORT_PATH), replace that path with your backups folder path.
+   - In line 18 (variable CHROME_PATH), replace `<Username>` with your system user's username. For example, my path is `CHROME_PATH = r'C:\Users\ikki\AppData\Local\Google\Chrome\User Data\Default\Local Extension Settings\chphlpgkkbolifaimnlloiipkdnihall'`.
+   - If you wish to change the backups folder: In line 21 (variable EXPORT_PATH), replace that path with your backups folder path.
 3. Then, you can run the script using `python OneTab-Exporter.py`.
 4. If you want to automate the back ups (and use Windows), open up the Task Scheduler (search using the Windows key). Watch this [tutorial](https://www.youtube.com/watch?v=n2Cr_YRQk7o&feature=emb_title) or follow the steps below (thanks to [itsjoshthedeveloper](https://github.com/itsjoshthedeveloper) for [writing it](https://github.com/itsjoshthedeveloper/backupOneTab#how-to-use)):
    - In the left pane, click `Task Scheduler Library`.
