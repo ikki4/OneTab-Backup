@@ -18,7 +18,7 @@ from datetime import datetime
 CHROME_PATH = r'C:\Users\<Username>\AppData\Local\Google\Chrome\User Data\Default\Local Extension Settings\chphlpgkkbolifaimnlloiipkdnihall'
 
 #path to the desired backup/export folder
-EXPORT_PATH = r'.\Backups'
+BACKUP_PATH = r'.\Backups'
 
 #name of the text file to be saved
 FILENAME = f"Onetab Backup {datetime.now().strftime('%Y-%m-%d %Hh%Mm%Ss')}" 
@@ -90,7 +90,7 @@ def clean_data(x, _print=True):
     count=0
     if type(x) == type([]):
         x=''.join(x)
-    x=x[x.find('"')+1:x.find('ا')]
+    x=x[x.find('"')+1:]
     y=x.split('"tabsMeta":')
     for i in range(len(y)):
         y[i]=y[i][1:y[i].find(']')]
@@ -167,14 +167,14 @@ def save_txt(s):
     save_txt(s)
     '''    
 
-    #creating export folder is it doesn't exist
-    if not Path(EXPORT_PATH).is_dir():
-        Path(EXPORT_PATH).mkdir()
-    #saving export file
-    with open(Path(EXPORT_PATH,FILENAME), mode='w',errors="ignore") as f:
+    #creating backup folder is it doesn't exist
+    if not Path(BACKUP_PATH).is_dir():
+        Path(BACKUP_PATH).mkdir()
+    #saving backup file
+    with open(Path(BACKUP_PATH,FILENAME), mode='w',errors="ignore") as f:
         f.write(s)  
     #ending
-    print(f'File "{FILENAME}" saved succesfully in the directory "{str(Path(EXPORT_PATH).resolve())}".')
+    print(f'File "{FILENAME}" saved succesfully in the directory "{str(Path(BACKUP_PATH).resolve())}".')
 
 
 # In[10]:
@@ -194,5 +194,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
