@@ -1,3 +1,12 @@
+Note: as of October 12th 2021, this repo will be archived. There's a project that works better than this one, so I decided that I'll no longer mantain this one. Instead, I'll fork that better project and improve it. 
+
+This is the link for that next project: [ikki4/OneTab-Backup-Automation](https://github.com/ikki4/OneTab-Backup-Automation) (forked from 
+[busyxiang/OneTab-Backup-Automation](https://github.com/busyxiang/OneTab-Backup-Automation))
+
+But since this original project is sort of useful (I'll actually use code from this project in the next one), I'll keep it as "archived" instead of deleting it, so people can still read it and reuse the code.
+
+---
+
 # OneTab-Backup
 
 This is a Python script that will allow you to automatically* backup your OneTab extension's tabs list.
